@@ -1,24 +1,26 @@
 from typing import List, Any, Tuple
 
-from flask import Flask, render_template, request, redirect, url_for, jsonify, Response
+from flask import Flask, render_template, request, jsonify, Response, make_response
+from flask_mail import Message, Mail
 from flask_sqlalchemy import SQLAlchemy
-from flask_mail import Mail, Message
-from werkzeug import Response
-
 
 app = Flask(__name__)
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:lkop123@localhost/postgres'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
-mail = Mail(app)
 
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+db = SQLAlchemy(app)
+
+app.config['MAIL_SERVER'] = 'smtp.googlegmail.com'
 app.config['MAIL_PORT'] = 465
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
-app.config['MAIL_USERNAME'] = 'iuk2.master.class@gmail.com'
-app.config['MAIL_PASSWORD'] = '123'
+app.config['MAIL_USERNAME'] = 'sergaykalabor'
+app.config['MAIL_PASSWORD'] = '22830032200lol'
+# app.config['MAIL_DEFAULT_SENDER'] = 'sergaykalabor@gmail.com'
 
+mail = Mail(app)
+ADMINS = ['sergaykalabor@gmail.com']
 
 class User(db.Model):
     __tablename__ = 'demo'
@@ -43,6 +45,28 @@ def finish(user_id: int) -> Response | tuple[Response, int]:
         if user:
             user.is_finished = not user.is_finished
             db.session.commit()
+            return make_response('', 200)
+        else:
+            return jsonify({'error': 'User not found'}), 404
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/send_email/<int:user_id>', methods=['POST'])
+def send_email(user_id: int) -> Response | tuple[Response, int]:
+    try:
+        user = User.query.get(user_id)
+        if user:
+            print(user)
+            mail1 = user.email
+            print(mail1)
+            # mail = User.query.get(email)
+            # Отправка электронного письма
+            message = Message('Мастеркласс завершен', sender='sergaykalabor@gmail.com', recipients='kapandoter228@mail.ru')
+            message.body = 'Поздравляем! Вы успешно завершили мастеркласс.'
+            mail.send(message)
+
+            return jsonify({'success': True})
         else:
             return jsonify({'error': 'User not found'}), 404
     except Exception as e:
