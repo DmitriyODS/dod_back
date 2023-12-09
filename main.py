@@ -1,6 +1,11 @@
-import app
+from flask import Flask
+from flask_restful import Api
 
-App = app.app
+
+def main():
+    app = Flask(__name__)
+    api = Api(app)
+
 
 if __name__ == '__main__':
-    App.run(debug=True)
+    main()
