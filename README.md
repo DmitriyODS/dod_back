@@ -7,4 +7,4 @@ email CHARACTER VARYING(255) NOT NULL,
 city CHARACTER VARYING(255) NOT NULL,
 school CHARACTER VARYING(255) NOT NULL,
 is_finished boolean,
-type_mk boolean)
+type_mk int)
