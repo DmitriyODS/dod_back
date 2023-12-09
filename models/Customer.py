@@ -5,11 +5,12 @@ from dataclasses import dataclass
 class Customer:
     id: int = 0
     fio: str = ''
-    city: str = ''
-    class_school: str = ''
-    school: str = ''
     email: str = ''
-    type_mk: int = 0
+    city: str = ''
+    school: str = ''
+    class_school: str = ''
+    type_mk: int = 0,
+    is_finished: bool = False
 
     def validate(self):
         if self.fio == '':
@@ -27,11 +28,8 @@ class Customer:
 
         return True, 'ok'
 
-    def parse_from_row(self, row):
-        pass
-
     def placeholder_add(self):
-        return self.fio, self.city, self.class_school, self.school, self.email, self.type_mk
+        return self.fio, self.email, self.city, self.school, self.class_school, self.type_mk
 
     def placeholder_update(self):
         return self.fio, self.city, self.class_school, self.school, self.email, self.type_mk, self.id

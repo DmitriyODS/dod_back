@@ -24,14 +24,14 @@ class PDB(metaclass=Singleton):
         self.__conn.close()
         self.__conn = None
 
-    def execute_fetchall(self, req_sql):
+    def execute_fetchall(self, *args):
         with self.__conn:
             with self.__conn.cursor() as cur:
-                cur.execute(req_sql)
+                cur.execute(*args)
                 return cur.fetchall()
 
-    def execute_fetchone(self, req_sql):
+    def execute_fetchone(self, *args):
         with self.__conn:
             with self.__conn.cursor() as cur:
-                cur.execute(req_sql)
+                cur.execute(*args)
                 return cur.fetchone()
